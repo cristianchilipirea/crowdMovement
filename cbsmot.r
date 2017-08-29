@@ -1,7 +1,6 @@
-source('Rscripts/myGPS/createMovementVector.r')
-source('Rscripts/core/utils.r')
+source('Scripts/crowdMovement/dbscan.r')
 
-eps_linear_neighborhood = function(p, t, Eps) {
+epsLinearNeighborhoodCBsmot = function(p, t, Eps) {
 	neighbors = c(p)
 	if(p>1) {
 		aux = p
@@ -31,34 +30,24 @@ eps_linear_neighborhood = function(p, t, Eps) {
 	return(neighbors)
 }
 
-isCore = function(neighbors, t, minTime) {
+isCoreCBsmot = function(neighbors, t, minTime) {
 	duration = t$time[max(neighbors)] - t$time[min(neighbors)]
 	return(duration >= minTime)
 }
 
-cbsmot = function(minTime, Eps, t) {
-	t = fixRowNames(t)
-	t$cluster = 0
-	for(p in 1:nrow(t)) {
-	  print(p)
-		neighbors = eps_linear_neighborhood(p, t, Eps)
-		if(isCore(neighbors, t, minTime)) {
-			cluster = p
-			if(t$cluster[p] != 0)
-				cluster = t$cluster[p]
-			t$cluster[neighbors] = cluster
-		}
-	}
-	return(t)
+cbsmot = function(minTime, Eps, detections) {
+  aux = epsLinearNeighborhood
+  aux1 = isCore
+	epsLinearNeighborhood <<- epsLinearNeighborhoodCBsmot
+	isCore <<- isCoreCBsmot
+	rezult = dbscan(minTime, Eps, detections)
+	
+	epsLinearNeighborhood <<- aux
+	isCore <<- aux1
+	return(rezult)
 }
 
-staticClustersToMovementVector = function(t) {
-	withoutFirst = -1
-	withoutLast = -nrow(t)
-	movementVector = (t$cluster == 0) | c(F, t$cluster[withoutFirst] != t$cluster[withoutFirst])
-	movementVector[1] = F
-	return(movementVector)
-}
+
 
 clusters2 = cbsmot(300, 200, GPSDetections)
 
