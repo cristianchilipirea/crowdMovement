@@ -1,35 +1,21 @@
 source('Scripts/crowdMovement/dbscan.r')
-epsLinearNeighborhoodCDbscan = function(p, t, Eps) {
-	neighbors = c(p)
-	if(p>1) {
-		for(i in (p-1):1) {
-			if(getDistance(t[p,], t[i,]) <= Eps)
-				neighbors = c(neighbors, i)
-			else
-				break
+
+cdbscan = function(detections, Eps, minPts) {
+	clusters = dbscan(detections, Eps, minPts)
+	reference = clusters[1]
+	count = 1
+	for(i in 2:length(clusters)) {
+		if(reference == clusters[i])
+			count = count + 1
+		else {
+			if(count < minPts)
+				clusters[(i-count):(i-1)] = 0
+			count = 1
+			reference = clusters[i]
 		}
 	}
-	if(p<nrow(t)) {
-		for(i in (p+1):nrow(t)) {
-			if(getDistance(t[p,], t[i,]) <= Eps)
-				neighbors = c(neighbors, i)
-			else
-				break
-		}
-	}
-
-	return(neighbors)
+	return(clusters)
 }
 
-cdbscan = function(minPts, Eps, detections) {
-	aux = epsLinearNeighborhood
-	epsLinearNeighborhood <<- epsLinearNeighborhoodCDbscan
-
-	rezult = dbscan(minPts, Eps, detections)
-
-	epsLinearNeighborhood <<- aux
-	return(rezult)
-}
-
-#cluster = cdbscan(5, 100, GPSDetections)
-#rm(list = lsf.str())
+# clusters = cdbscan(5, 100, GPSDetections)
+# rm(list = lsf.str())

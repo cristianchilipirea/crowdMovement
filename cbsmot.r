@@ -7,7 +7,7 @@ epsLinearNeighborhoodCBsmot = function(p, t, Eps) {
 		sum = 0
 		for(i in (p-1):1) {
 			sum = sum + getDistance(t[aux,], t[i,])
-			if(sum <= Eps)
+			if(sum < Eps)
 				neighbors = c(neighbors, i)
 			else
 				break
@@ -19,7 +19,7 @@ epsLinearNeighborhoodCBsmot = function(p, t, Eps) {
 		sum = 0
 		for(i in (p+1):nrow(t)) {
 			sum = sum + getDistance(t[aux,], t[i,])
-			if(sum <= Eps)
+			if(sum < Eps)
 				neighbors = c(neighbors, i)
 			else
 				break
@@ -35,13 +35,13 @@ isCoreCBsmot = function(neighbors, t, minTime) {
 	return(duration >= minTime)
 }
 
-cbsmot = function(minTime, Eps, detections) {
-  aux = epsLinearNeighborhood
-  aux1 = isCore
+cbsmot = function(detections, Eps, minTime) {
+	aux = epsLinearNeighborhood
+	aux1 = isCore
 	epsLinearNeighborhood <<- epsLinearNeighborhoodCBsmot
 	isCore <<- isCoreCBsmot
-	rezult = dbscan(minTime, Eps, detections)
-	
+	rezult = dbscan(detections, Eps, minTime)
+
 	epsLinearNeighborhood <<- aux
 	isCore <<- aux1
 	return(rezult)
@@ -49,6 +49,5 @@ cbsmot = function(minTime, Eps, detections) {
 
 
 
-clusters2 = cbsmot(300, 200, GPSDetections)
-
-rm(list = lsf.str())
+#clusters2 = cbsmot(300, 200, GPSDetections)
+#rm(list = lsf.str())

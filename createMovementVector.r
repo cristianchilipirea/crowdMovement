@@ -1,7 +1,8 @@
 #install.packages('geosphere')
+source('Scripts/crowdMovement/distances.r')
 library('geosphere')
 
-createMovementVector = function(detections) {
+createMovementVector = function(detections, Eps) {
 	reference = detections[1,]
 
 	movementVector = rep(F, nrow(detections))
@@ -9,8 +10,8 @@ createMovementVector = function(detections) {
 		return(movementVector)
 
 	for(i in 2:nrow(detections)) {
-	  print(i)
-		if(isDistanceLargeEnough(reference, detections[i,])) {
+	  #print(i)
+		if(getDistance(reference, detections[i,]) >= Eps) {
 			movementVector[i] = T
 			reference = detections[i,]
 		}
@@ -18,18 +19,7 @@ createMovementVector = function(detections) {
 	return(movementVector)
 }
 
-isDistanceLargeEnough = function(detectionA, detectionB) {
-	# TODO generalize this and add scanner/distance support, remove 100
-	return(getDistance(detectionA, detectionB) > 100)
-}
 
-getDistance = function(detectionA, detectionB) {
-  #print(detectionA)
-	geoPositionDetectionA = detectionA[,c("latitude", "longitude")]
-	geoPositionDetectionB = detectionB[,c("latitude", "longitude")]
-	distance = distGeo(geoPositionDetectionA, geoPositionDetectionB)
-	return(distance)
-}
 
 # start = Sys.time()
 # movementVector = createMovementVector(GPSDetections)
