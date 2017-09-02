@@ -16,7 +16,7 @@ createMovementVector = function(detections, Eps) {
 	return(movementVector)
 }
 
-wrapperOurSolution = function(detections, Eps) {
-	movementVector = createMovementVector(detections, Eps)
+wrapperAlgorithm = function(detections, valueOfKnobs) {
+	movementVector = createMovementVector(detections, valueOfKnobs$Eps)
 	return(movementVector)
 }

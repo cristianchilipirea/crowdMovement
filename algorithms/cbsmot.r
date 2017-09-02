@@ -49,8 +49,8 @@ cbsmot = function(detections, Eps, minTime) {
 	return(clusters)
 }
 
-wrapperCbsmot = function(detections, Eps, minTime) {
-	clusters = cbsmot(detections, Eps, minTime)
+wrapperAlgorithm = function(detections, valueOfKnobs) {
+	clusters = cbsmot(detections, valueOfKnobs$Eps, valueOfKnobs$minTime)
 	movementVector = convertStaticClustersToMovementVector(clusters)
 	return(movementVector)
 }

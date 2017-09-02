@@ -1,4 +1,5 @@
-source('Scripts/crowdMovement/runHelpers/runCbsmot.r')
+source('Scripts/crowdMovement/algorithms/cbsmot.r')
+source('Scripts/crowdMovement/runGeneric.r')
 
 getValuesOfKnobs = function() {
 	Eps = c(seq(0, 290, 10), c(seq(300, 800, 50)))
@@ -8,6 +9,6 @@ getValuesOfKnobs = function() {
 	return(valuesOfKnobs)
 }
 
-rezultsCbsmot = wrapperRunSweepOnAlgorithm(GPSDetections)
+rezultsCbsmot = runSweepOnAlgorithm(GPSDetections)
 
 rm(list = lsf.str())

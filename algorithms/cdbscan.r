@@ -18,8 +18,8 @@ cdbscan = function(detections, Eps, minPts) {
 	return(clusters)
 }
 
-calculateMovements_Cdbscan = function(detections, Eps, minPts) {
-	clusters = cdbscan(detections, Eps, minPts)
+wrapperAlgorithm = function(detections, valueOfKnobs) {
+	clusters = cdbscan(detections, valueOfKnobs$Eps, valueOfKnobs$minPts)
 	movementVector = convertStaticClustersToMovementVector(clusters)
 	return(movementVector)
 }

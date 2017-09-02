@@ -28,6 +28,3 @@ dbscan = function(elements, Eps, minValue) {
 	}
 	return(clusters)
 }
-
-#cluster = dbscan(5, 100, GPSDetections)
-#rm(list = lsf.str())
