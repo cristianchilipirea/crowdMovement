@@ -1,10 +1,10 @@
-source('Scripts/crowdMovement/utils.r')
-source('Scripts/crowdMovement/distances.r')
+source('Scripts/crowdMovement/util/misc.r')
+source('Scripts/crowdMovement/util/distances.r')
 
 epsLinearNeighborhood = function(elementPosition, elements, Eps) {
 	reference = elements[elementPosition,]
 
-	isNeighbor = (getDistance(reference, elements)<Eps)
+	isNeighbor = (getDistance(reference, elements) < Eps)
 
 	return(isNeighbor)
 }

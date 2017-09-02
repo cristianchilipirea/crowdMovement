@@ -1,7 +1,8 @@
-source('Scripts/crowdMovement/dbscan.r')
+source('Scripts/crowdMovement/algorithms/dbscan.r')
 
 cdbscan = function(detections, Eps, minPts) {
 	clusters = dbscan(detections, Eps, minPts)
+	print(table(clusters))
 	reference = clusters[1]
 	count = 1
 	for(i in 2:length(clusters)) {
@@ -17,5 +18,8 @@ cdbscan = function(detections, Eps, minPts) {
 	return(clusters)
 }
 
-# clusters = cdbscan(5, 100, GPSDetections)
-# rm(list = lsf.str())
+calculateMovements_Cdbscan = function(detections, Eps, minPts) {
+	clusters = cdbscan(detections, Eps, minPts)
+	movementVector = convertStaticClustersToMovementVector(clusters)
+	return(movementVector)
+}

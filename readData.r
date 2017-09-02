@@ -1,24 +1,26 @@
 library('geosphere')
+library('readr')
 
 readmyGPSData = function() {
 	#folder = "C:/Users/cristian.chilipirea/Dropbox/Projects/Assen2016/myGPS/detections/"
-	folder = "D:/Dropbox/Projects/Assen2016/myGPS/detections/"
+	folder = "C:/Users/cristian.chilipirea/Dropbox/Projects/Assen2016/MaartenGPS/detections/"
 	files = dir(folder)
 	files = paste(folder, files, sep="")
 	rezult = data.frame()
 	for(i in 1:length(files)) {
+	  print(files[i])
 	  rezult = rbind(rezult , read_csv(files[i]))
 	}
 
 	rezult$time = as.numeric(rezult$time)
-	rezult = rezult[,c("lat", "lon", "time")]
-	colnames(rezult) = c("latitude", "longitude", "time")
+	rezult = rezult[,c("latitude", "longitude", "time", "speed (km/h)")]
+	#colnames(rezult) = c("latitude", "longitude", "time")
 	rezult = rezult[order(rezult$time),]
 	return(rezult)
 }
 
 writeGPS = function(gps_data) {
-	dets = paste(gps_data$time, gps_data$lat, gps_data$lon, sep = ", ")
+	dets = paste(gps_data$time, gps_data$latitude, gps_data$longitude, sep = ", ")
 	dets = paste(dets, collapse = "], [")
 	dets = paste("var gpsPositions = [[", dets, "]];", sep="")
 	write(file="C:/Users/cristian.chilipirea/Dropbox/Assen2016/movements_individual_2016_modular_GPS/scripts/data/gpsPositions.js", dets)
@@ -44,8 +46,9 @@ addLabelsToGPSData= function(GPSDetections, stopLocations) {
 }
 
 GPSDetections = readmyGPSData()
-stopLocations = readStopLocations()
+writeGPS(GPSDetections)
+#stopLocations = readStopLocations()
 #writeGPS(gps_data)
-GPSDetections = addLabelsToGPSData(GPSDetections, stopLocations)
+#GPSDetections = addLabelsToGPSData(GPSDetections, stopLocations)
 
 rm(list = lsf.str())
