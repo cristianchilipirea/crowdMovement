@@ -1,5 +1,3 @@
-source('Scripts/crowdMovement/util/distances.r')
-
 createMovementVector = function(detections, Eps) {
 	reference = detections[1,]
 

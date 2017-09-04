@@ -1,5 +1,6 @@
 source('Scripts/crowdMovement/algorithms/cbsmot.r')
 source('Scripts/crowdMovement/runGeneric.r')
+source('Scripts/crowdMovement/utils/distance_GPS.r')
 
 getValuesOfKnobs = function() {
 	Eps = c(seq(0, 290, 10), c(seq(300, 800, 50)))

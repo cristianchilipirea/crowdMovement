@@ -4,7 +4,7 @@ source('Scripts/crowdMovement/util/detections.r')
 
 compareMultipleMovements = function(movementsPredictedSet, movements) {
 	results = sapply(movementsPredictedSet, FUN = function(movementsPredicted) {
-		TP = compareMovements(movementsPredicted, movements)
+		TP = getTimeInCommonMovementSets(movementsPredicted, movements)
 		PredictedP = getTotalMovementDuration(movementsPredicted)
 		return(c(TP, PredictedP))
 	})
@@ -24,7 +24,7 @@ convertComparisonResultsToConfusionMatrix = function(comparisonResults, movement
 	return(confusionMatrix)
 }
 
-runSweepOnAlgorithm = function(detections) {
+runSweepOnAlgorithm = function(detections, movements) {
 	valuesOfKnobs = getValuesOfKnobs()
 	valuesOfKnobsAsList = split(valuesOfKnobs,1:nrow(valuesOfKnobs))
 
@@ -38,4 +38,43 @@ runSweepOnAlgorithm = function(detections) {
 	comparisonResults = compareMultipleMovements(allMovementsPredicted, movements)
 	confusionMatrices = convertComparisonResultsToConfusionMatrix(comparisonResults, movements, detections)
 	return(cbind(confusionMatrices, valuesOfKnobs))
+}
+
+getPartitions = function(detections) {
+	maximalTimeBetweenDetections = 1200
+	timeBetweenDetections = detections$time[-1] - detections$time[-nrow(detections)]
+	splitPoints = timeBetweenDetections > maximalTimeBetweenDetections
+	partitions = cumsum(c(T,splitPoints))
+	return(partitions)
+}
+
+runSweepOnAlgorithmWithAllDevices = function(detections) {
+	devices = unique(detections$device)
+	results = sapply(devices, FUN = function(device) {
+		print(device)
+		filteredDetections = detections[detections$device == device,]
+		filteredMovements = movements[movements$device == device,]
+		partitions = getPartitions(filteredDetections)
+		print(max(partitions))
+		splitDetections = split(filteredDetections, partitions)
+		
+		splitDetections = splitDetections[lapply(splitDetections, nrow) > 1]
+		print(lapply(splitDetections,nrow))
+		
+		partialConfusionMatrices = lapply(splitDetections, FUN=function(partialDetections){
+			minTime = min(partialDetections$time)
+			maxTime = max(partialDetections$time)
+			print(minTime)
+			print(maxTime)
+			partialMovements = limitMovementsToTimeInterval(filteredMovements, minTime, maxTime)
+			partialConfusionMatrices = runSweepOnAlgorithm(partialDetections, partialMovements)
+			return(partialConfusionMatrices)
+		})
+		confusionMatrices = partialConfusionMatrices[[1]]
+		if(length(partialConfusionMatrices)>=2)
+			for(i in 2:length(partialConfusionMatrices))
+				confusionMatrices[1:4] = confusionMatrices[1:4] + partialConfusionMatrices[[i]][1:4]
+		return(list(list(device = device, confusionMatrices = confusionMatrices)))
+	})
+	return(results)
 }

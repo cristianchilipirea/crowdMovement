@@ -1,11 +1,3 @@
-convertStaticClustersToMovementVector = function(clusters) {
-	withoutFirst = -1
-	withoutLast = -length(clusters)
-	movementVector = (clusters == 0) | c(F, clusters[withoutFirst] != clusters[withoutLast])
-	movementVector[1] = F
-	return(movementVector)
-}
-
 extractMovements = function(movementVector, times) {
 	# extract movement times
 	nextTimes = times[movementVector]
@@ -15,7 +7,7 @@ extractMovements = function(movementVector, times) {
 	return(movements)
 }
 
-filterMovements = function(movements, maxMovementDuration) {
+filterLongMovements = function(movements, maxMovementDuration) {
 	selector = ((movements$endTime - movements$startTime) < maxMovementDuration)
 	movements = movements[selector,]
 	return(movements)
@@ -56,7 +48,7 @@ limitMovementsToTimeInterval = function(movements, minTime, maxTime) {
 	return(movements)
 }
 
-compareMovements = function(movementsA, movementsB) {
+getTimeInCommonMovementSets = function(movementsA, movementsB) {
 	sum = 0
 	if(nrow(movementsA)<=0)
 		return(0)

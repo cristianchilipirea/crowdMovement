@@ -29,7 +29,7 @@ writeGPS = function(gps_data) {
 
 readStopLocations = function() {
   #fileName = "C:/Users/cristian.chilipirea/Dropbox/Projects/Assen2016/myGPS/InterestingLocations.csv"
-  fileName = "D:/Dropbox/Projects/Assen2016/myGPS/InterestingLocations.csv"
+  fileName = "MaartenGPS/InterestingLocations.csv"
 	stopLocations <- read.csv(fileName)
 	stopLocations$locationName = as.character(stopLocations$locationName)
 	return(stopLocations)
@@ -45,10 +45,12 @@ addLabelsToGPSData= function(GPSDetections, stopLocations) {
   return(GPSDetections)
 }
 
-GPSDetections = readmyGPSData()
-writeGPS(GPSDetections)
-#stopLocations = readStopLocations()
+#GPSDetections2 = readmyGPSData()
+#writeGPS(GPSDetections)
+stopLocations2 = readStopLocations()
 #writeGPS(gps_data)
-#GPSDetections = addLabelsToGPSData(GPSDetections, stopLocations)
+GPSDetections2 = addLabelsToGPSData(GPSDetections2, stopLocations2)
 
 rm(list = lsf.str())
+
+#GPSDetections$isMoving = c(F, GPSDetections$isMoving[-nrow(GPSDetections)]) | GPSDetections$isMoving

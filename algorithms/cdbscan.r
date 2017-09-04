@@ -1,8 +1,10 @@
 source('Scripts/crowdMovement/algorithms/dbscan.r')
+source('Scripts/crowdMovement/algorithms/dbscan_utils.r')
+# TODO add wrapper algorithm
 
 cdbscan = function(detections, Eps, minPts) {
 	clusters = dbscan(detections, Eps, minPts)
-	print(table(clusters))
+
 	reference = clusters[1]
 	count = 1
 	for(i in 2:length(clusters)) {
@@ -15,6 +17,9 @@ cdbscan = function(detections, Eps, minPts) {
 			reference = clusters[i]
 		}
 	}
+	# It might be the case that a "fake" cluster is at the end
+	if(count < minPts)
+		clusters[(length(clusters)-count+1):length(clusters)] = 0
 	return(clusters)
 }
 
