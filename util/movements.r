@@ -82,3 +82,32 @@ convertStaticClustersToMovementVector = function(clusters) {
 	movementVector[1] = F
 	return(movementVector)
 }
+
+plotMovementSets = function(movementSetA, movementSetB) {
+	plotStart = min(c(movementSetA$startTime, movementSetB$startTime))
+	plotEnd = max(c(movementSetA$endTime, movementSetB$endTime))
+	plot(c(movementSetA$startTime[1], movementSetA$endTime[1]), c(1,1), 
+		xlim=c(plotStart, plotEnd), xlab="Time",
+		ylim=c(0,3), ylab="Movement",
+		type="l", lwd=3)
+	for(i in 2:nrow(movementSetA)) {
+		lines(c(movementSetA$startTime[i], movementSetA$endTime[i]), c(1,1), lwd=3)
+	}
+	
+	for(i in 1:nrow(movementSetB)) {
+		lines(c(movementSetB$startTime[i], movementSetB$endTime[i]), c(2,2), lwd=3, col="red")
+	}
+}
+
+plotMovementsAndDetections = function(movementSetA, detections) {
+	plotStart = min(c(movementSetA$startTime, detections$time))
+	plotEnd = max(c(movementSetA$endTime, detections$time))
+	plot(c(movementSetA$startTime[1], movementSetA$endTime[1]), c(1,1), 
+		xlim=c(plotStart, plotEnd), xlab="Time",
+		ylim=c(0,3), ylab="Movement",
+		type="l", lwd=3)
+	for(i in 2:nrow(movementSetA)) {
+		lines(c(movementSetA$startTime[i], movementSetA$endTime[i]), c(1,1), lwd=3)
+	}
+	points(detections$time, rep(2, nrow(detections)), pch=20, col="red")
+}

@@ -1,14 +1,14 @@
 source('Scripts/crowdMovement/algorithms/createMovementVector.r')
 source('Scripts/crowdMovement/runGeneric.r')
-source('Scripts/crowdMovement/util/distance_GPS.r')
+source('Scripts/crowdMovement/util/distance_scanners.r')
 
 getValuesOfKnobs = function() {
-	Eps = c(100, 120, 130)
-	mergeTime = c(0, 300, 600)
+	Eps = seq(50,500,10)
+	mergeTime = c(seq(0, 280, 20), seq(300, 3600, 300))
 	valuesOfKnobs = expand.grid(Eps = Eps, mergeTime = mergeTime)
 	return(valuesOfKnobs)
 }
 
-resultsOurSolution = runSweepOnAlgorithmWithAllDevices(GPSDetections)
+resultsOurSolution2 = runSweepOnAlgorithmWithAllDevices(ourDetections)
 
 rm(list = lsf.str())

@@ -1,6 +1,6 @@
 source('Scripts/crowdMovement/algorithms/createMovementVector.r')
 source('Scripts/crowdMovement/runGeneric.r')
-source('Scripts/crowdMovement/util/distance_GPS.r')
+source('Scripts/crowdMovement/util/distance_scanners.r')
 
 getValuesOfKnobs = function() {
 	Eps = c(100, 120, 130)
@@ -9,6 +9,6 @@ getValuesOfKnobs = function() {
 	return(valuesOfKnobs)
 }
 
-resultsOurSolution = runSweepOnAlgorithmWithAllDevices(GPSDetections)
+resultsOurSolution = runSweepOnAlgorithmWithAllDevices(ourDetections)
 
 rm(list = lsf.str())

@@ -1,6 +1,6 @@
 source('Scripts/crowdMovement/algorithms/cbsmot.r')
 source('Scripts/crowdMovement/runGeneric.r')
-source('Scripts/crowdMovement/util/distance_GPS.r')
+source('Scripts/crowdMovement/util/distance_scanners.r')
 
 getValuesOfKnobs = function() {
 	Eps = c(100,110,120)
@@ -10,6 +10,6 @@ getValuesOfKnobs = function() {
 	return(valuesOfKnobs)
 }
 
-resultsCbsmot2 = runSweepOnAlgorithmWithAllDevices(GPSDetections)
+resultsCbsmot2 = runSweepOnAlgorithmWithAllDevices(ourDetections)
 
 rm(list = lsf.str())
