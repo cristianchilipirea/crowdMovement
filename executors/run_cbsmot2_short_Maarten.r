@@ -1,4 +1,4 @@
-source('Scripts/crowdMovement/algorithms/cbsmot.r')
+source('Scripts/crowdMovement/algorithms/cbsmot2.r')
 source('Scripts/crowdMovement/runGeneric.r')
 source('Scripts/crowdMovement/util/distance_GPS.r')
 
@@ -13,7 +13,7 @@ getValuesOfKnobs = function() {
 
 #rezultsOurSolution = runSweepOnAlgorithm(GPSDetections2)
 startTime = Sys.time()
-b = wrapperAlgorithm(GPSDetections[GPSDetections$device==2,], getValuesOfKnobs())
+a = wrapperAlgorithm(GPSDetections[GPSDetections$device==2,], getValuesOfKnobs())
 print(Sys.time() - startTime)
 rm(startTime)
 #rez = runSweepOnAlgorithmWithAllDevices(GPSDetections)
